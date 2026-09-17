@@ -18,14 +18,14 @@ public:
             cout<< "Array is full" << endl;
             return;
         }
-        for (int i = size ; i > 0 ; i--) {
+        for (int i = size ; i > 0 ; i--) { // for an un-ordered array the time complexity will be O(n) cause it hast to shift every n element to the right.
             data[i] = data[i-1];
         }
         data[0] = item;
         size++;
             //data[size++] = item;
     }
-    void deleteFront() {
+    void deleteFront() { // O(n) as shifting is the main elements that's taking the most time.
         if (size == 0) {
             cout<< "Array is empty" << endl;
             return;
@@ -35,7 +35,7 @@ public:
         }
         size--;
     }
-    bool search(T item) {
+    bool search(T item) { // O(n) searching through every element n of the array
         if (size == 0 ) {
             cout << "Array is Empty" << endl;
             return false;
@@ -53,7 +53,11 @@ public:
         }
         cout<<endl;
     }
-    void addToBack(T item) {
+
+
+    // Added a methods to add from the back and delete from the back.
+
+    void addToBack(T item) { // O(1)
         if (size >= CAPACITY) {
             cout<< "Array is Full" << endl;
             return;
@@ -61,15 +65,13 @@ public:
         data[size] = item;
         size++;
     }
-    void deleteBack() {
+    void deleteBack() { // O(1)
         if (size == 0) {
             cout<< "Array is Empty" << endl;
             return;
         }
         size--;
     }
-
-// add to the back and delete from the back
 
 private:
     static const int CAPACITY = 20;
