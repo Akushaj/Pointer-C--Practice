@@ -13,7 +13,7 @@ public:
     ArrayList():size(0) {
 
     }
-    void add(T item) {
+    void add(T item) { // add from the front
         if (size >= CAPACITY) {
             cout<< "Array is full" << endl;
             return;
@@ -44,9 +44,32 @@ public:
             if (data[i] == item) {
                 return true;
             }
-            return false;
         }
+        return false;
     }
+    void printArray() {
+        for (int i = 0; i < size ; i++) {
+            cout << data[i] << ",";
+        }
+        cout<<endl;
+    }
+    void addToBack(T item) {
+        if (size >= CAPACITY) {
+            cout<< "Array is Full" << endl;
+            return;
+        }
+        data[size] = item;
+        size++;
+    }
+    void deleteBack() {
+        if (size == 0) {
+            cout<< "Array is Empty" << endl;
+            return;
+        }
+        size--;
+    }
+
+// add to the back and delete from the back
 
 private:
     static const int CAPACITY = 20;
