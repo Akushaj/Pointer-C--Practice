@@ -19,6 +19,9 @@ public:
 
         next = nullptr;
     }
+    void print() {
+        value->print();
+    }
 
 private:
 
