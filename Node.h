@@ -7,9 +7,7 @@
 // the pointer inside the node is also a node type because we need it to point to another node
 template <typename T>
 class Node {
-public:
-
-    T *value;
+    /*T *value;
     Node<T> *next;
 
     Node(T *value) {
@@ -21,8 +19,12 @@ public:
     }
     void print() {
         value->print();
-    }
+    }*/ // notes
 
-private:
+public:
+    T* data;
+    Node<T>* next;
+
+    explicit Node(T* value) : data(value), next(nullptr){}
 
 };
