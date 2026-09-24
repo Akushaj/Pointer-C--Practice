@@ -1,10 +1,14 @@
 ## 1. In LinkedList::deleteFront(), why does it take two separate delete calls instead of one? Name exactly what each one frees, and name the two new calls back in the program responsible for putting them on the heap in the first place.
-= 
+= In main.cpp the roster->addFront(new Data(1, "Alice" )) uses the new keyword to create the first heap allocation which is a Data object . Inside addFront, Node<T>* fresh = new Node<T>(value) creates the second one which is the node. delete doomed->data frees the Data object, and delete doomed frees the Node. If we don't use any of them then it would leak the memory.
+
 ## 2. ArrayList never had a destructor before today. Explain, in your own words, why switching from T data[CAPACITY] to T* data [CAPACITY] is what made a destructor necessary, and what would happen if you forgot to write one. Would you get a compiler error? Why or why not?
-= 
+= Even if you don't write the destructor the code would still compile but there would be the issue of memory leak which isn't a error that compiler can catch. T* data [CAPACITY] this makes the array only have pointers on it and when we destroy it, it will only destroy the pointers not the heap memories those pointers are pointing towards. So in order to free that heap memory you need to explicitly write a code in this case the destructor.
+
 ## 3. search() and addFront() both take a T*, but they treat that pointer completely differently. Explain the difference in terms of ownership: which one is allowed to delete what you hand it, and which one is never allowed to?
-= 
-## 4. ou swapped LinkedList<T> for ArrayList<T> inside makeList() and reran main.cpp without changing a single line there. What two mechanisms, by name, made that possible?
-= 
+= list->addFront(new int(10)) here allocates an int on the heap using the new keyword and gives that address straight to the list which has the functionality to call delete eventually through the deleteFront() method and the destructor.  On the other hand int key = 20; list->search(&key); where key  is a stack variable and search never deletes it because we have it as a const object which is a restriction on the method that it won't make any changes to the array
+
+## 4. You swapped LinkedList<T> for ArrayList<T> inside makeList() and reran main.cpp without changing a single line there. What two mechanisms, by name, made that possible?
+= virtual is applied to List<T>'s methods. Because of that, when those methods are called through a List<T>* or unique_ptr<List<T>>, the call is resolved at runtime, based on what object is actually present — not based on the declared pointer type. The makeList<T>() is the single place that decides which class gets constructed. By commenting out the LinkedList<T> line and uncommenting the ArrayList<T> line changes what every caller receives, without any caller needing to know
+
 ## 5. Pick one keyword from the Key Terms glossary that you either had to add today or wouldn’t have thought to add on your own (explicit, override, virtual, const, or any other). Describe, in your own words and without copying the guide’s wording, the smallest example you can think of where leaving it out would cause a real problem.
-= 
+= I chose template as it lets List<T>  work with any type without writing the same class over and over. For example without template <typename T> I wouldn't be able to have a single List class handle both int and Data. For that I'd need two separate class like ListOfInt and ListOfData each with it's own copy of addFront, deleteFront, search, and print which would be identical except for the  data type. If there was a bug in addFront I would need to fit it in both copies separately.
