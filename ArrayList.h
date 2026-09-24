@@ -22,6 +22,18 @@ public:
         data_[0] = value;
         ++size_;
     }
+    void deleteFront() override {
+        if (size_ == 0) {
+            std::cout << "ArrayList is empty." << std::endl;
+            return;
+        }
+        delete data_[0];
+        for (int i = 0; i < size_ - 1; ++i) {
+            data_[i] = data_[i + 1];
+        }
+        --size_;
+    }
+
     bool search(T* value) const override {
         for (int i =0; i < size_; ++i) {
             if (*data_[i] == *value) return true;
