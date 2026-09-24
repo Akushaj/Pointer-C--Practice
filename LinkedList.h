@@ -4,51 +4,57 @@
 
 #pragma once
 #include "Node.h"
+#include "List.h"
 
 template<typename T>
-class LinkedList {
+class LinkedList : public List<T> {
 public:
-    Node<T> *head;
-    Node<T> *tail;
-    int size;
+    LinkedList() : head_(nullptr) {}
 
-    // We are doing overloading where we can use the same name for constructor but have different values in the parameters
-    // Tress and Graph are non empty data structures and they are sister data structures
-    LinkedList(T *value) { // have at least one value when creating a linked list
-        Node<T> *temp = new Node<T>(value);
-        head = temp;
-        tail = temp;
-        size = 1;
-    }
-    LinkedList() { // if you want a empty linkedList constructor
-        head = nullptr;
-        tail = nullptr;
-        size = 0;
-    }
-    void print() {
-        Node<T> *temp1 = head;
-         while (temp1 != nullptr) {
-             temp1->print();
-             temp1 = temp1->next; // never move the head pointer cause we can't loose it so we assigne it to a temporary pointer
-         }
+    void addFront(T* value) override {
+        Node<T>* fresh = new Node<T>(value);
+        fresh->next = head_;
+        head_ = fresh;
     }
 
-    void append(T *value) { // adding to the last of the list
-        Node<T> *newNode = new Node<T>(value); // taking the value and covering it with a Node, calls a node constructor and always point to null cause
-        if (head == nullptr) {
-            head = newNode;
-            size++; // increase the size of the linkedList
+    void deleteFront() override {
+        if (head_ == nullptr) {
+           std::cout << "LinkedList is empty" <<std::endl;
             return;
         }
-        // Node<T> *temp = head;
-        // while (temp->next != nullptr) { // temp ends up one before the last one which is the null pointer and you dont want anything to be at null pointer cause u will lose track of where you came from
-        //     temp = temp->next;
-        // }
-
-        tail->next = newNode; //it becomes O(1) when we add tail but if we only use head and not tail then
-        tail = tail->next; // tail=newnode
-        // the link to null pointer is broken and it will point to newNode
-        size++; // increase the size of the linkedlist
+        Node<T>* doomed = head_;
+        head_ = head_->next;
+        delete doomed->data;
+        delete doomed;
     }
-    // add delete at the end hmmm
+
+    bool search(T* value) const override {
+        Node<T>* current = head_;
+        while (current != nullptr) {
+            if (*current->data == *value) return true;
+            current = current->next;
+        }
+        return false;
+    }
+
+    void print() const override {
+        Node<T>* current = head_;
+        while (current != nullptr) {
+            std::cout << *current->data << ",";
+            current = current->next;
+        }
+        std::cout << std::endl;
+    }
+
+    ~LinkedList() override {
+        while (head_ != nullptr) {
+            Node<T>* doomed = head_;
+            head_ = head_->next;
+            delete doomed->data;
+            delete doomed;
+        }
+    }
+
+private:
+    Node<T>* head_;
 };
